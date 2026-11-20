@@ -1,0 +1,208 @@
+<!doctype html>
+<!-- Ember Studio — photographic pull-cord lighting study; open locally with assets beside this file. R resets, T demos, M toggles sound. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#b3a18b">
+<title>Ember Studio — Light, made personal.</title>
+<style>
+/* 8px spacing rhythm; all photographs and fonts are local, including file://. */
+@font-face{font-family:Instrument;src:url('assets/fonts/instrument-serif.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Instrument;src:url('assets/fonts/instrument-serif-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:Inter;src:url('assets/fonts/inter.woff2') format('woff2');font-weight:100 900;font-display:swap}
+:root{color-scheme:light;--ink:#29271f;--muted:#403b32;--cream:#f8ecd6;--line:#39312440;--ease:cubic-bezier(.22,1,.36,1);--margin:24px}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{background:#b3a18b;color:var(--ink);font-family:Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased;touch-action:none}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit}a{color:inherit;text-decoration:none}a:focus-visible,button:focus-visible{outline:1px solid currentColor;outline-offset:5px}button{cursor:pointer}img{display:block;max-width:100%}h1,p{margin:0}body[data-theme=dark]{--ink:#fff1d9;--muted:#f2e4cd;--line:#ead5b843;color-scheme:dark}
+/* The photographic room is a separate layer: only its transform moves with parallax. */
+.scene{position:fixed;inset:-12px;z-index:0;background:linear-gradient(125deg,#d1c2ad,#8b7458);will-change:transform;animation:fade-in 1.4s var(--ease) both}.scene picture,.scene img{width:100%;height:100%;object-fit:cover}.scene:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#decbb51a 0%,#eadcc544 48%,#d5c3a64d 75%,#26231c30),radial-gradient(ellipse at 50% 35%,transparent 30%,#302a2430 100%)}.room-night{position:absolute;inset:0;background:linear-gradient(180deg,#07101a55,#0b111bb0 55%,#07101a88);opacity:0;transition:opacity .6s var(--ease)}body[data-theme=dark] .room-night{opacity:1}
+.page{position:relative;z-index:1;height:100svh;display:grid;grid-template-rows:40px minmax(264px,1fr) 232px 168px 32px;gap:24px;padding:calc(24px + env(safe-area-inset-top)) var(--margin) calc(16px + env(safe-area-inset-bottom));isolation:isolate}.page:before{content:'';position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,transparent 35%,#e9dcc51a 60%,#e1d2b933 100%);pointer-events:none}nav{display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{font:40px/.8 Instrument,Georgia,serif;letter-spacing:-1.6px}.brand small{display:block;font:7px/1 Inter,Arial,sans-serif;letter-spacing:2.5px;text-transform:uppercase;margin:8px 0 0 2px}.navlinks{display:flex;gap:24px;font-size:10px;letter-spacing:.1px}.navlinks a{padding:8px 0;border-bottom:1px solid transparent;transition:border-color .4s var(--ease)}.navlinks a:hover{border-color:currentColor}.stage{position:relative;pointer-events:none}.object-label{position:absolute;bottom:0;left:0;font-size:8px;line-height:1.8;letter-spacing:1.2px;text-transform:uppercase}.object-label span{display:block;font-family:Instrument,Georgia,serif;font-size:18px;letter-spacing:0;text-transform:none;margin-bottom:4px}.hero{text-align:center;align-self:start}.eyebrow{font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}h1{font:400 72px/.88 Instrument,Georgia,serif;letter-spacing:-1.7px;text-wrap:balance}h1 em{font-weight:400}p{font-size:11px;line-height:1.6;color:var(--muted);margin-top:16px}.cta{display:inline-flex;gap:32px;align-items:center;min-height:40px;margin-top:8px;border-bottom:1px solid var(--ink);font-size:10px;letter-spacing:.2px}.cta span{font-size:17px}.collection{min-width:0;align-self:end}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.card{margin:0;padding:8px;border:1px solid var(--line);background:#ddcbb37a;transition:background .6s var(--ease),border-color .6s var(--ease);overflow:hidden}.product-image{overflow:hidden;aspect-ratio:1/1;background:linear-gradient(130deg,#c5ad8c,#89735b)}.product-image img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}.card:hover img,.card:active img{transform:scale(1.045)}.card:hover{border-color:#b09369;background:#e9d5b43d}.card-info{padding-top:8px;display:flex;flex-direction:column;gap:4px}.card-info strong{font-size:9px;line-height:1.2;letter-spacing:1.6px;font-weight:500;text-transform:uppercase}.card-info span{font-size:9px;color:var(--muted);line-height:1.5}.footer{align-self:end;display:flex;align-items:center;justify-content:space-between;min-height:32px;border-top:1px solid var(--line);padding-top:8px;font-size:7px;letter-spacing:1.4px;text-transform:uppercase;padding-right:104px}.sound{position:fixed;z-index:8;right:24px;bottom:calc(16px + env(safe-area-inset-bottom));height:32px;border:0;border-bottom:1px solid #685b444d;background:#e8dac4c9;color:#302b23;font-size:9px;letter-spacing:.4px;padding:0 0 0 8px}.sound:before{content:'';display:inline-block;width:4px;height:4px;background:currentColor;border-radius:50%;margin-right:8px;opacity:.5}.sound[aria-pressed=true]:before{opacity:1;background:#b38444}body[data-theme=dark] .sound{color:#d4c1a1;background:#111821}body[data-theme=dark] .card{background:#151a20c4}body[data-theme=dark] .card:hover{background:#252622d9}
+/* These wrappers never alter the physics transform or the pointer hit target. */
+.fixture{position:fixed;z-index:4;top:-3px;pointer-events:none;transform-origin:50% 0;will-change:transform;animation:fade-in 1.3s var(--ease) backwards}.suspension{position:absolute;left:calc(50% - .75px);top:0;width:1.5px;height:var(--stub-y);background:linear-gradient(90deg,#1f211f,#605b4e,#282821)}.photo-shell{position:absolute;top:var(--photo-top);left:0;width:100%;aspect-ratio:1400/933;transform-origin:50% calc(-1 * var(--photo-top));animation:arrive 1.8s var(--ease) both}.lamp-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.lamp-off{filter:drop-shadow(2px 12px 10px #36230e18)}.filament{opacity:1}.lamp-bloom{position:absolute;left:12%;top:54%;width:76%;height:80%;background:radial-gradient(ellipse,#ffe0a07a 0%,#ffcf6b28 35%,#e1b15900 70%);mix-blend-mode:screen;pointer-events:none}.fixture .lamp-bloom{z-index:-1}#veil,#atmosphere,#rope{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}#veil{z-index:3}#atmosphere{z-index:2;mix-blend-mode:screen}#rope{z-index:6}.bead{position:fixed;z-index:7;left:0;top:0;width:46px;height:52px;border:0;background:none;padding:0;cursor:grab;touch-action:none;border-radius:22px;will-change:transform}.bead:active{cursor:grabbing}.bead:before{content:'';position:absolute;width:11px;height:24px;left:17.5px;top:14px;border-radius:5px 5px 7px 7px;background:linear-gradient(90deg,#5c4329,#c5a76d 32%,#e2c58e 43%,#b38b4e 63%,#695035);box-shadow:inset 0 1px 1px #fff8,2px 3px 4px #251b1740}.bead:after{content:'';position:absolute;left:18px;top:19px;width:10px;height:1px;background:#64492e;box-shadow:0 3px #64492e66}.hint{position:fixed;left:0;top:0;z-index:6;font:italic 16px Instrument,Georgia,serif;color:#4f412c;pointer-events:none;transition:opacity .5s var(--ease);animation:breathe 2.4s var(--ease) infinite}.hint span{display:inline-block;margin-left:8px;font:16px Georgia,serif;transform:rotate(-25deg)}.hint.gone{opacity:0;animation:none}.record .hint,.record .sound{display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.hero .eyebrow,.hero h1,.hero p,.hero .cta{animation:rise 1.1s var(--ease) both}.hero .eyebrow{animation-delay:.1s}.hero h1{animation-delay:.18s}.hero p{animation-delay:.28s}.hero .cta{animation-delay:.38s}.collection{animation:rise 1.2s .4s var(--ease) both}@keyframes fade-in{from{opacity:0}to{opacity:1}}@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes arrive{from{transform:rotate(-1.4deg);opacity:0}to{transform:rotate(0);opacity:1}}@keyframes breathe{50%{opacity:.45;translate:0 3px}}
+@media(min-width:700px){:root{--margin:64px}.page{display:block;padding:32px var(--margin)}nav{height:48px}.brand{font-size:48px}.brand small{font-size:8px}.navlinks{gap:40px;font-size:11px}.hero{position:absolute;left:var(--margin);top:24%;width:540px;text-align:left}.eyebrow{font-size:9px;margin-bottom:24px}h1{font-size:112px;line-height:.86;letter-spacing:-2.4px}p{font-size:13px;margin-top:24px}.cta{margin-top:16px;min-height:48px;font-size:11px;gap:48px}.stage{position:absolute;left:calc(72% - 120px);top:58%;width:240px;height:64px}.object-label{text-align:center;right:0;left:0;font-size:9px}.object-label span{font-size:26px}.collection{position:absolute;bottom:88px;left:var(--margin);width:560px}.cards{gap:16px}.card{padding:8px}.product-image{aspect-ratio:1.3/1}.card-info{padding:12px 4px 4px;flex-direction:row;align-items:center;justify-content:space-between;gap:8px}.card-info strong{font-size:9px}.card-info span{font-size:8px}.footer{position:absolute;left:var(--margin);right:var(--margin);bottom:24px;min-height:40px;padding-right:160px;font-size:8px}.sound{right:var(--margin);bottom:24px;height:40px}.scene:after{background:linear-gradient(90deg,#e9dac466,transparent 60%),radial-gradient(ellipse at 50% 40%,transparent 30%,#29231e30)}.page:before{display:none}.room-night{background:linear-gradient(90deg,#0a111bc4 0%,#0b111b88 55%,#07101a77)}}
+@media(min-width:700px) and (max-height:780px){.hero{top:20%}h1{font-size:88px}.collection{width:480px;bottom:80px}.product-image{aspect-ratio:1.5/1}.stage{top:61%}}
+@media(max-width:699px) and (max-height:850px){.page{grid-template-rows:40px minmax(176px,1fr) 208px 144px 24px;gap:16px;padding-top:24px}h1{font-size:64px}.eyebrow{margin-bottom:12px}.product-image{aspect-ratio:1.2/1}.object-label span{font-size:16px}.footer{font-size:6px}.sound{font-size:8px}.card-info span{font-size:7px}}
+@media(max-width:699px) and (max-height:740px){.page{grid-template-rows:32px minmax(112px,1fr) 168px 112px 24px;padding-top:16px;gap:16px}.brand{font-size:32px}.brand small{font-size:6px}.object-label{display:none}h1{font-size:48px}.eyebrow{margin-bottom:8px;font-size:7px}p{margin-top:8px;font-size:10px}.cta{min-height:32px;margin-top:4px;font-size:9px}.product-image{aspect-ratio:1.65/1}.card-info{padding-top:4px;gap:2px}.card-info strong{font-size:8px}.card-info span{font-size:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.scene{will-change:auto}}
+</style>
+</head>
+<body data-theme="light">
+<div class="scene" aria-hidden="true"><picture><source media="(min-width:700px)" srcset="assets/room-wide.jpg"><img src="assets/room.jpg" width="1080" height="1920" alt="" decoding="async" fetchpriority="high"></picture><div class="room-night"></div></div>
+<main class="page">
+ <nav aria-label="Main navigation"><a class="brand" href="#" aria-label="Ember Studio home">ember<small>Lighting studio</small></a><div class="navlinks"><a href="#collection">Collection</a><a href="#story">Philosophy</a></div></nav>
+ <div class="stage"><aside class="object-label"><span>Sol No. 01</span>Brushed brass · 2400 K</aside></div>
+ <section class="hero" id="story"><div class="eyebrow">Objects for slower living</div><h1>Light, made<br><em>personal.</em></h1><p>A little warmth. A space that feels like you.</p><a class="cta" href="#collection">Explore the collection <span aria-hidden="true">↗</span></a></section>
+ <section class="collection" id="collection" aria-label="The lighting collection"><div class="cards">
+  <article class="card"><div class="product-image"><img src="assets/product-1.jpg" width="900" height="900" decoding="async" alt="Dune: a terracotta mushroom lamp on an oak side table"></div><div class="card-info"><strong>Dune</strong><span>Terracotta · $180</span></div></article>
+  <article class="card"><div class="product-image"><img src="assets/product-2.jpg" width="900" height="900" decoding="async" alt="Halo: an opal glass globe on a brushed brass base"></div><div class="card-info"><strong>Halo</strong><span>Opal glass · $240</span></div></article>
+  <article class="card"><div class="product-image"><img src="assets/product-3.jpg" width="900" height="900" decoding="async" alt="Arc: a moss enamel desk lamp on walnut"></div><div class="card-info"><strong>Arc</strong><span>Moss enamel · $210</span></div></article>
+ </div></section>
+ <footer class="footer"><span>Made for the everyday ritual.</span></footer>
+</main>
+<canvas id="atmosphere" aria-hidden="true"></canvas><canvas id="veil" aria-hidden="true"></canvas>
+<div class="fixture" aria-hidden="true"><div class="suspension"></div><div class="photo-shell"><div class="lamp-bloom"></div><img class="lamp-photo lamp-off" src="assets/lamp-off.png" width="1400" height="933" decoding="async" fetchpriority="high" alt=""><img class="lamp-photo filament" src="assets/lamp-on.png" width="1400" height="933" decoding="async" fetchpriority="high" alt=""></div></div>
+<canvas id="rope" aria-hidden="true"></canvas>
+<button class="bead" role="switch" aria-checked="true" aria-label="Pendant light. Pull down, or press Enter or Space to switch."></button>
+<div class="hint" aria-hidden="true">pull gently <span>↴</span></div>
+<button class="sound" aria-pressed="false" aria-label="Enable sound">♪ Sound off</button>
+<span class="sr-only" id="status" role="status" aria-live="polite">The light is on.</span>
+<script>
+'use strict';
+// 1. Configuration. Positions and rope lengths are CSS pixels; physics is 120 Hz.
+const CONFIG = { colors:{ink:'#070d18',beam:'#ffe1a0'}, segments:14, threshold:70, ropeLength:119, gravity:760, damping:.986, iterations:12, step:1/120, radius:210, idle:1500, dpr:Math.min(devicePixelRatio||1,2) };
+const $=s=>document.querySelector(s), bead=$('.bead'), fixture=$('.fixture'), filament=$('.filament'), hint=$('.hint'), soundButton=$('.sound');
+const canvases=['atmosphere','veil','rope'].map(id=>document.getElementById(id));
+const [air,veil,rope]=canvases.map(c=>c.getContext('2d'));
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+const record=new URLSearchParams(location.search).get('record')==='1';
+document.body.classList.toggle('record',record);
+let w=innerWidth,h=innerHeight,scale=1,pivot={x:0,y:0},anchor={x:0,y:0},nodes=[],angle=0,angularVelocity=0;
+let on=true,level=1,darkness=0,transition=null,drag=null,armed=false,pull=0,extension=0,extensionVelocity=0;
+let simTime=0,lastFrame=0,accumulator=0,raf=0,auto=null,demo=null,clickSuppressed=false;
+let pointer={x:w*.5,y:h*.5},spot={...pointer},lastInput=-Infinity;
+let audio=null,humGain=null,muted=true;
+// Visual-only state: photography geometry, ambient grain, and room parallax.
+const scene=$('.scene'), bloom=$('.lamp-bloom');
+let lampWidth=366,lampPhotoTop=64,parallaxX=0,parallaxY=0,visualTheme='light';
+const grainTile=document.createElement('canvas');grainTile.width=128;grainTile.height=128;
+const grainContext=grainTile.getContext('2d'),grainData=grainContext.createImageData(128,128);
+for(let i=0;i<grainData.data.length;i+=4){let hash=Math.imul(i+719,1597334677);hash=Math.imul(hash^(hash>>>16),2246822519);const v=(hash^(hash>>>13))&255;grainData.data[i]=v;grainData.data[i+1]=v;grainData.data[i+2]=v;grainData.data[i+3]=14;}
+grainContext.putImageData(grainData,0,0);
+const filmGrain=veil.createPattern(grainTile,'repeat');
+const dust=Array.from({length:40},(_,i)=>({x:((i*73.37)%100)/100,y:((i*37.13)%100)/100,r:.5+(i%4)*.25,s:4+i%7}));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const smooth=t=>t*t*(3-2*t);
+
+// 2. Geometry and a fixed-size Verlet chain. No allocations in the physics loop.
+function resize(){
+ w=innerWidth;h=innerHeight;
+ const mobile=w<700;
+ lampWidth=mobile?Math.min(w-(h<=740?112:64),380):Math.min(w*.4,600);
+ lampPhotoTop=mobile?(h<=740?24:h<=850?48:64):70;
+ scale=lampWidth/260;pivot={x:mobile?w*.5:w*.72,y:-3};
+ fixture.style.left=`${pivot.x-lampWidth/2}px`;
+ fixture.style.width=`${lampWidth}px`;fixture.style.height=`${lampPhotoTop+lampWidth*933/1400}px`;
+ fixture.style.setProperty('--photo-top',`${lampPhotoTop}px`);
+ fixture.style.setProperty('--stub-y',`${lampPhotoTop+lampWidth*102/1400}px`);
+ for(const c of canvases){c.width=Math.round(w*CONFIG.dpr);c.height=Math.round(h*CONFIG.dpr);c.getContext('2d').setTransform(CONFIG.dpr,0,0,CONFIG.dpr,0,0);}
+ updateAnchor();nodes=Array.from({length:CONFIG.segments+1},(_,i)=>({x:anchor.x,y:anchor.y+i*CONFIG.ropeLength/CONFIG.segments,px:anchor.x,py:anchor.y+i*CONFIG.ropeLength/CONFIG.segments}));
+}
+function updateAnchor(){const x=lampWidth*.385,y=lampPhotoTop+lampWidth*.537;anchor.x=pivot.x+x*Math.cos(angle)-y*Math.sin(angle);anchor.y=pivot.y+x*Math.sin(angle)+y*Math.cos(angle);}
+function physics(dt){
+ const desired=drag?pull:auto?auto.pull:0;
+ extensionVelocity+=(desired-extension)*210*dt;extensionVelocity*=Math.exp(-15*dt);extension+=extensionVelocity*dt;
+ const force=(drag||auto)?((drag?drag.x:anchor.x)-anchor.x)*.0009+extension*.00018:0;
+ angularVelocity+=(force-angle*17)*dt;angularVelocity*=Math.exp(-1.65*dt);angle+=angularVelocity*dt;if(reduced.matches){angle=0;angularVelocity=0;}
+ updateAnchor();nodes[0].x=anchor.x;nodes[0].y=anchor.y;
+ for(let i=1;i<nodes.length;i++){const n=nodes[i],vx=(n.x-n.px)*CONFIG.damping,vy=(n.y-n.py)*CONFIG.damping;n.px=n.x;n.py=n.y;n.x+=vx;n.y+=vy+CONFIG.gravity*dt*dt;}
+ const end=nodes[nodes.length-1];
+ // A weighted tassel returns toward its hanging position instead of whipping
+ // upward with the contracting chain; the Verlet history retains overshoot.
+ if(!drag&&!auto){
+  end.x+=(anchor.x-end.x)*24*dt*dt;
+  end.y+=(anchor.y+CONFIG.ropeLength+extension-end.y)*240*dt*dt;
+  end.px=end.x-(end.x-end.px)*.94;end.py=end.y-(end.y-end.py)*.90;
+ }
+ const segment=(CONFIG.ropeLength+Math.max(-12,extension))/CONFIG.segments;
+ for(let k=0;k<CONFIG.iterations;k++){
+  nodes[0].x=anchor.x;nodes[0].y=anchor.y;
+  if(drag||auto){end.x+=( (drag?drag.x:anchor.x+Math.sin(simTime*4)*3)-end.x)*.48;end.y+=(anchor.y+CONFIG.ropeLength+desired-end.y)*.65;}
+  for(let i=0;i<nodes.length-1;i++){const a=nodes[i],b=nodes[i+1],dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1,diff=(len-segment)/len;if(i){a.x+=dx*diff*.5;a.y+=dy*diff*.5;}b.x-=dx*diff*(i?.5:1);b.y-=dy*diff*(i?.5:1);}
+ }
+}
+
+// 3. Gesture lifecycle. Crossing the detent arms the switch; release commits it.
+function hideHint(){hint.classList.add('gone');}
+function detent(){if(armed)return;armed=true;extensionVelocity-=90;tick();}
+bead.addEventListener('pointerdown',e=>{
+ if(transition||auto)return;e.preventDefault();cancelDemo();initAudio();hideHint();bead.setPointerCapture(e.pointerId);
+ const end=nodes[nodes.length-1];drag={id:e.pointerId,startY:e.clientY,x:end.x,startX:e.clientX,baseX:end.x};pull=0;armed=false;
+});
+bead.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;pull=clamp(e.clientY-drag.startY,0,125);drag.x=drag.baseX+clamp(e.clientX-drag.startX,-85,85);if(pull>=CONFIG.threshold)detent();});
+function release(e,cancelled=false){if(!drag||e.pointerId!==drag.id)return;const commit=armed&&!cancelled;drag=null;armed=false;pull=0;angularVelocity+=reduced.matches?0:.12;clickSuppressed=true;if(bead.hasPointerCapture(e.pointerId))bead.releasePointerCapture(e.pointerId);if(commit)toggle();}
+bead.addEventListener('pointerup',e=>release(e));bead.addEventListener('pointercancel',e=>release(e,true));bead.addEventListener('lostpointercapture',e=>release(e,true));
+bead.addEventListener('click',e=>{if(clickSuppressed){clickSuppressed=false;return;}if(e.detail===0)animatePull();});
+bead.addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();if(!e.repeat){clickSuppressed=false;animatePull();}}});
+window.addEventListener('pointermove',e=>{pointer.x=e.clientX;pointer.y=e.clientY;lastInput=simTime*1000;},{passive:true});
+window.addEventListener('pointerdown',e=>{pointer.x=e.clientX;pointer.y=e.clientY;lastInput=simTime*1000;},{passive:true});
+function animatePull(){if(auto||transition||drag)return;initAudio();hideHint();armed=false;auto={start:simTime,pull:0};}
+function toggle(){if(transition)return;on=!on;transition={start:simTime,to:on};bead.setAttribute('aria-checked',String(on));$('#status').textContent=on?'The light is on.':'The light is off. Move your pointer to explore with the flashlight.';clack();}
+function lighting(){
+ if(!transition)return;const t=(simTime-transition.start)*1000;
+ if(transition.to){const p=clamp(t/700,0,1);darkness=1-smooth(clamp(t/420,0,1));level=1+Math.sin(p*Math.PI)*.55;if(t>700){level=1;darkness=0;transition=null;}}
+ else{const flicker=reduced.matches?1:t<65?.12:t<110?1:t<175?.06:t<245?.8:1;level=t<245&&!reduced.matches?flicker:Math.pow(1-clamp((t-(reduced.matches?0:245))/400,0,1),2);darkness=smooth(clamp(t/620,0,1));if(t>650){level=0;darkness=1;transition=null;}}
+ if(humGain)humGain.gain.setTargetAtTime(muted?0:level*.009,audio.currentTime,.07);
+}
+
+// 4. Synthesized audio stays silent until explicitly enabled by a user gesture.
+function initAudio(){if(audio||muted)return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audio=new Audio();const osc=audio.createOscillator();humGain=audio.createGain();osc.type='sine';osc.frequency.value=60;humGain.gain.value=on?.009:0;osc.connect(humGain).connect(audio.destination);osc.start();}
+function tone(freq,duration,gain,delay=0){if(muted||!audio)return;audio.resume().catch(()=>{});const t=audio.currentTime+delay,o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(freq*.43,t+duration);g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g).connect(audio.destination);o.start(t);o.stop(t+duration);o.onended=()=>{o.disconnect();g.disconnect();};}
+function tick(){tone(920,.028,.025);}function clack(){tone(440,.045,.055);tone(240,.065,.035,.055);}
+function mute(){muted=!muted;initAudio();if(audio)audio.resume().catch(()=>{});if(humGain)humGain.gain.setTargetAtTime(muted?0:level*.009,audio.currentTime,.08);soundButton.textContent=muted?'♪ Sound off':'♫ Sound on';soundButton.setAttribute('aria-pressed',String(!muted));soundButton.setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
+soundButton.addEventListener('click',mute);
+
+// 5. One composited darkness veil reveals the real DOM through a feathered beam.
+function render(dt){
+ const idle=simTime*1000-lastInput>CONFIG.idle;
+ const wander=idle&&!reduced.matches;
+ const tx=wander?w*(.5+.28*Math.sin(simTime*.47)):pointer.x,ty=wander?h*(.53+.24*Math.sin(simTime*.69+.8)):pointer.y;
+ const follow=1-Math.exp(-dt*7);spot.x+=(tx-spot.x)*follow;spot.y+=(ty-spot.y)*follow;
+ const radius=Math.min(CONFIG.radius,w*.48),end=nodes[nodes.length-1];
+ fixture.style.transform=`rotate(${angle}rad)`;fixture.style.opacity=1-darkness*.58;filament.style.opacity=Math.min(1,level);bloom.style.opacity=Math.min(1,level);
+ const nextTheme=darkness>.15?'dark':'light';
+ if(nextTheme!==visualTheme){visualTheme=nextTheme;document.body.dataset.theme=nextTheme;}
+ const drift=reduced.matches?0:1-Math.exp(-dt*2);
+ parallaxX+=((pointer.x/w-.5)*-6-parallaxX)*drift;
+ parallaxY+=((pointer.y/h-.5)*-4-parallaxY)*drift;
+ scene.style.transform=`translate3d(${parallaxX}px,${parallaxY}px,0)`;
+ bead.style.transform=`translate3d(${end.x-23}px,${end.y-25}px,0)`;hint.style.transform=`translate3d(${end.x-100}px,${end.y-3}px,0)`;
+ rope.clearRect(0,0,w,h);rope.beginPath();rope.moveTo(nodes[0].x,nodes[0].y);for(let i=1;i<nodes.length;i++)rope.lineTo(nodes[i].x,nodes[i].y);rope.strokeStyle=darkness>.5?'#a08b66':'#493b29';rope.lineWidth=1.15;rope.stroke();
+ air.clearRect(0,0,w,h);const bulbY=lampPhotoTop+lampWidth*.565,lx=pivot.x-bulbY*Math.sin(angle),ly=pivot.y+bulbY*Math.cos(angle);
+ // A feathered elliptical wash avoids polygon edges against photographic plaster.
+ if(level>.001){
+  air.save();air.translate(lx,ly+lampWidth*.25);air.scale(.8,1.3);
+  const cone=air.createRadialGradient(0,0,0,0,0,lampWidth*.85);
+  cone.addColorStop(0,`rgba(255,215,142,${.16*level})`);
+  cone.addColorStop(.3,`rgba(255,211,133,${.08*level})`);
+  cone.addColorStop(1,'rgba(255,218,153,0)');
+  air.fillStyle=cone;air.fillRect(-lampWidth,-lampWidth,lampWidth*2,lampWidth*2);air.restore();
+ }
+
+ veil.clearRect(0,0,w,h);
+ if(darkness>.001){veil.globalAlpha=darkness;veil.fillStyle=CONFIG.colors.ink;veil.fillRect(0,0,w,h);veil.globalCompositeOperation='destination-out';const beam=veil.createRadialGradient(spot.x,spot.y,0,spot.x,spot.y,radius);beam.addColorStop(0,'rgba(0,0,0,.98)');beam.addColorStop(.26,'rgba(0,0,0,.92)');beam.addColorStop(.55,'rgba(0,0,0,.57)');beam.addColorStop(.82,'rgba(0,0,0,.10)');beam.addColorStop(1,'rgba(0,0,0,0)');veil.fillStyle=beam;veil.fillRect(0,0,w,h);veil.globalCompositeOperation='source-over';veil.globalAlpha=1;
+  // Four percent ambient keeps silhouettes readable beyond the flashlight.
+  veil.globalCompositeOperation='destination-out';veil.fillStyle='rgba(0,0,0,.045)';veil.fillRect(0,0,w,h);veil.globalCompositeOperation='source-over';
+  const warmth=veil.createRadialGradient(spot.x,spot.y,0,spot.x,spot.y,radius);warmth.addColorStop(0,'rgba(255,203,120,.055)');warmth.addColorStop(.5,'rgba(245,200,120,.035)');warmth.addColorStop(1,'rgba(97,129,165,0)');veil.fillStyle=warmth;veil.globalAlpha=darkness;veil.fillRect(0,0,w,h);veil.globalAlpha=1;
+  eggs(radius);
+ }
+ // Deterministic dust: no particles are created or destroyed as the demo runs.
+ const ctx=darkness>.5?veil:air;
+ for(const d of dust){const motionTime=reduced.matches?0:simTime,x=(d.x*w+Math.sin(motionTime*.16+d.s)*14+w)%w,y=(d.y*h-motionTime*d.s*.45%h+h)%h;let alpha=0;if(darkness>.5){alpha=Math.pow(Math.max(0,1-Math.hypot(x-spot.x,y-spot.y)/radius),2)*.45;}else{alpha=Math.max(0,1-Math.abs(x-lx)/(60+Math.max(0,y-ly)*.5))*.26*level;if(y<ly)alpha=0;}ctx.fillStyle=`rgba(255,232,185,${alpha})`;ctx.beginPath();ctx.arc(x,y,d.r,0,Math.PI*2);ctx.fill();}
+ veil.save();veil.globalAlpha=.16;veil.fillStyle=filmGrain;veil.fillRect(0,0,w,h);veil.restore();
+ // Stationary micro-grain within the beam, inexpensive and free of shimmer.
+ if(darkness>.5){veil.fillStyle='#fff2d1';for(let i=0;i<100;i++){const x=(i*127.31)%w,y=(i*79.73)%h;veil.globalAlpha=Math.max(0,1-Math.hypot(x-spot.x,y-spot.y)/radius)*.065;veil.fillRect(x,y,1,1);}veil.globalAlpha=1;}
+}
+function eggs(radius){
+ const reveal=(x,y)=>Math.pow(Math.max(0,1-Math.hypot(x-spot.x,y-spot.y)/(radius*.8)),1.5)*darkness;
+ const x=w*.45,y=h*.37;veil.save();veil.globalAlpha=reveal(x,y)*.8;veil.fillStyle='#e1c99a';veil.font='italic 22px Instrument, Georgia';veil.translate(x,y);veil.rotate(-.13);veil.fillText('found you.',-30,0);veil.restore();
+ const sx=w*(w<700?.12:.87),sy=h*(w<700?.32:.66);veil.save();veil.globalAlpha=reveal(sx,sy)*.75;veil.strokeStyle='#d4bc8c';veil.fillStyle='#eddbaf';veil.lineWidth=.7;veil.beginPath();for(let i=0;i<5;i++){const px=sx+Math.sin(i*1.9)*28,py=sy+i*12;if(i)veil.lineTo(px,py);else veil.moveTo(px,py);}veil.stroke();for(let i=0;i<5;i++){veil.beginPath();veil.arc(sx+Math.sin(i*1.9)*28,sy+i*12,1.7,0,7);veil.fill();}veil.restore();
+ const cx=w*(w<700?.58:.68),cy=h*(w<700?.936:.82);veil.save();veil.globalAlpha=reveal(cx,cy)*.85;veil.fillStyle='#dfcda7';veil.font='8px Inter, Arial';veil.fillText('A little secret — GLOW15',cx-65,cy);veil.restore();
+}
+
+// 6. Recording timeline uses simulation time, so hidden tabs pause everything.
+function cancelDemo(){demo=null;}
+function reset(){if(drag&&bead.hasPointerCapture(drag.id))bead.releasePointerCapture(drag.id);on=true;level=1;darkness=0;transition=null;drag=null;auto=null;demo=null;armed=false;pull=0;extension=0;extensionVelocity=0;angle=0;angularVelocity=0;clickSuppressed=false;bead.setAttribute('aria-checked','true');$('#status').textContent='The light is on.';lastInput=-Infinity;hint.classList.remove('gone');resize();if(humGain)humGain.gain.setTargetAtTime(muted?0:.009,audio.currentTime,.08);}
+function startDemo(){reset();demo={start:simTime,stage:0};}
+function frame(now){
+ const dt=Math.min((now-lastFrame)/1000||1/60,.05);lastFrame=now;simTime+=dt;
+ if(demo){const t=simTime-demo.start;if(demo.stage===0&&t>.55){animatePull();demo.stage=1;}if(demo.stage===1&&t>5.2){animatePull();demo.stage=2;}if(t>7)demo=null;}
+ if(auto){const t=simTime-auto.start,duration=reduced.matches?.24:.64;auto.pull=96*smooth(clamp(t/duration,0,1));if(auto.pull>=CONFIG.threshold)detent();if(t>duration+.12){auto=null;armed=false;angularVelocity+=reduced.matches?0:.18;toggle();}}
+ accumulator+=dt;while(accumulator>=CONFIG.step){physics(CONFIG.step);accumulator-=CONFIG.step;}lighting();render(dt);raf=requestAnimationFrame(frame);
+}
+document.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const key=e.key.toLowerCase();if(key==='r')reset();if(key==='t')startDemo();if(key==='m')mute();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);if(audio)audio.suspend().catch(()=>{});}else{lastFrame=performance.now();accumulator=0;if(audio&&!muted)audio.resume().catch(()=>{});raf=requestAnimationFrame(frame);}});
+window.addEventListener('resize',resize);resize();lastFrame=performance.now();raf=requestAnimationFrame(frame);
+if(record)demo={start:simTime+.95,stage:0};
+</script>
+</body>
+</html>
